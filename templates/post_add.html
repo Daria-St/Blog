@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Добавление заметки</h2>
+<form action="{% url 'post_add_submit' %}" method="post">
+    {% csrf_token %}
+    <label for="title">Название</label><br>
+    <input id="title" name="title" type="text"><br>
+
+    <label for="text">Текст</label><br>
+    <textarea id="text" name="text"></textarea><br>
+
+    <input type="submit" value="Добавить">
+</form>
+</body>
+</html>
