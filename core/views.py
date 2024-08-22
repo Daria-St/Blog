@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Post
+from .models import Post, PostCategory
 
 def main(request):
     posts = Post.objects.all()
@@ -11,13 +11,23 @@ def posts(request):
 
 def post_add(request):
 
-    return render(request, 'post_add.html')
+    categories = PostCategory.objects.all()
 
-def post_add_submit(request):
-    title = request.POST.get('title')
-    text = request.POST.get('text')
+    if request.method == "POST":
+        title = request.POST.get('title')
+        text = request.POST.get('text')
 
-    Post.objects.create(title=title, text=text)
+        category_id=request.POST.get('category')
+        if title == '' or text == '':
+            error = 'Есть незаполненное поле'
+            return render(request, 'post_add.html', {'error': error})
+        category = PostCategory.objects.get(id=category_id)
 
-    print(title, text)
-    return redirect('main')
+        Post.objects.create(title=title, text=text, category=category)
+        return redirect('main')
+
+    return render(request, 'post_add.html', {'categories': categories})
+
+
+
+
