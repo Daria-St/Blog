@@ -3,11 +3,23 @@ from .models import Post, PostCategory
 
 def main(request):
     posts = Post.objects.all()
-    return render(request, 'main.html', {"posts": posts})
+    category = request.GET.get('category')
+    active_category = None
+    if category:
+        posts = posts.filter(category__id=category)
+        active_category = PostCategory.objects.get(id=category)
+    categories = PostCategory.objects.all()
 
-def posts(request):
-    posts = Post.objects.all()
-    return render(request, '', {"posts": posts})
+    context = {
+        "posts": posts,
+        'categories': categories,
+        'active_category': active_category
+    }
+
+    return render(request, 'main.html', context)
+
+    # return render(request, 'main.html', {"posts": posts})
+
 
 def post_add(request):
 
