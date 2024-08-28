@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Post, PostCategory
+from .models import Post, PostCategory, PostComment
 
 def main(request):
     posts = Post.objects.all()
@@ -19,6 +19,12 @@ def main(request):
     return render(request, 'main.html', context)
 
     # return render(request, 'main.html', {"posts": posts})
+
+def post_detail(request, post_id):
+    post= Post.objects.get(id=post_id)
+    comments = PostComment.objects.filter(post=post)
+    return render(request, 'post_detail.html', {"post": post, 'comments': comments})
+
 
 
 def post_add(request):
@@ -41,5 +47,12 @@ def post_add(request):
     return render(request, 'post_add.html', {'categories': categories})
 
 
+def comment_add(request, post_id):
+    if request.method == 'POST':
+        post= Post.objects.get(id=post_id)
+        text = request.POST.get('text')
+        PostComment.objects.create(post=post, text=text)
+
+        return redirect('post_detail', post.id)
 
 
