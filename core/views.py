@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Post, PostCategory, PostComment
+from .forms import PostAddForm
 
 def main(request):
     posts = Post.objects.all()
@@ -26,25 +27,46 @@ def post_detail(request, post_id):
     return render(request, 'post_detail.html', {"post": post, 'comments': comments})
 
 
-
 def post_add(request):
 
     categories = PostCategory.objects.all()
+    post_add_form = PostAddForm()
 
     if request.method == "POST":
-        title = request.POST.get('title')
-        text = request.POST.get('text')
+        post_add_form = PostAddForm(request.POST)
+        if post_add_form.is_valid():
+            data = post_add_form.cleaned_data
+            Post.objects.create(title=data['title'],
+                                text=data['text'],
+                                category=data['category'])
+            return redirect('main')
 
-        category_id=request.POST.get('category')
-        if title == '' or text == '':
-            error = 'Есть незаполненное поле'
-            return render(request, 'post_add.html', {'error': error})
-        category = PostCategory.objects.get(id=category_id)
+    context = {
+        'categories':categories,
+        'post_add_form':post_add_form
+    }
+    return render(request, 'post_add.html', context)
 
-        Post.objects.create(title=title, text=text, category=category)
-        return redirect('main')
 
-    return render(request, 'post_add.html', {'categories': categories})
+
+# def post_add(request):
+#
+#     categories = PostCategory.objects.all()
+#
+#     if request.method == "POST":
+#         title = request.POST.get('title')
+#         text = request.POST.get('text')
+#
+#         category_id=request.POST.get('category')
+#         if title == '' or text == '':
+#             error = 'Есть незаполненное поле'
+#             return render(request, 'post_add.html', {'error': error})
+#         category = PostCategory.objects.get(id=category_id)
+#
+#         Post.objects.create(title=title, text=text, category=category)
+#         return redirect('main')
+#
+#     return render(request, 'post_add.html', {'categories': categories})
 
 
 def comment_add(request, post_id):
