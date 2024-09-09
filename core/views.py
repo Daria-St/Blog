@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Post, PostCategory, PostComment, Feedback
-from .forms import PostAddForm, CommentAddForm, FeedbackAddForm
+from .forms import PostAddForm, CommentAddForm, FeedbackAddForm, PostAddModelForm
 
 def main(request):
     posts = Post.objects.all()
@@ -38,17 +38,16 @@ def post_detail(request, post_id):
         'comments': comments,
         'comment_add_form': comment_add_form
     }
-
     return render(request, 'post_detail.html', context)
 
 
 def post_add(request):
 
     categories = PostCategory.objects.all()
-    post_add_form = PostAddForm()
+    post_add_form = PostAddModelForm()
 
     if request.method == "POST":
-        post_add_form = PostAddForm(request.POST)
+        post_add_form = PostAddModelForm(request.POST)
         if post_add_form.is_valid():
             data = post_add_form.cleaned_data
             Post.objects.create(title=data['title'],
