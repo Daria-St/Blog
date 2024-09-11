@@ -12,6 +12,11 @@ class PostAddModelForm(forms.ModelForm):
         model = Post
         fields = ['title', 'text', 'category']
 
+    def __init__(self, *args, **kwargs):
+        super(PostAddModelForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
     def clean(self):
         cleaned_data = super().clean()
         title = cleaned_data.get('title')
@@ -26,5 +31,17 @@ class CommentAddForm(forms.Form):
     text = forms.CharField(max_length=1000, label='Текст')
 
 class FeedbackAddForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(FeedbackAddForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
     name = forms.CharField()
     text = forms.CharField(max_length=1000, widget=forms.Textarea)
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].split()
+        if len(name) != 2:
+            raise ValidationError('Некорректный ввод имени')
+        return name
