@@ -178,6 +178,18 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'main' %}">Главная</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'post_add' %}">Добавить заметку</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'feedback_add' %}">Обратная связь</a></li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{% url 'login' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ user }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                </ul>
+            </li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
+            {% endif %}
         </ul>
 
 
