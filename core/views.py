@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Post, PostCategory, PostComment, Feedback
 from .forms import PostAddForm, CommentAddForm, FeedbackAddForm, PostAddModelForm
@@ -40,7 +41,7 @@ def post_detail(request, post_id):
     }
     return render(request, 'post_detail.html', context)
 
-
+@login_required
 def post_add(request):
 
     categories = PostCategory.objects.all()
@@ -50,9 +51,12 @@ def post_add(request):
         post_add_form = PostAddModelForm(request.POST)
         if post_add_form.is_valid():
             data = post_add_form.cleaned_data
+
+            profile = request.user.profile
             Post.objects.create(title=data['title'],
                                 text=data['text'],
-                                category=data['category'])
+                                category=data['category'],
+                                profile=profile)
             return redirect('main')
 
     context = {

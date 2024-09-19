@@ -1,4 +1,5 @@
 from django.db import models
+from user.models import Profile
 
 class PostCategory(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название')
@@ -18,6 +19,10 @@ class Post(models.Model):
                                  null = True,
                                  on_delete=models.SET_NULL,
                                  related_name='category_post')
+
+    profile = models.ForeignKey(Profile,
+                                related_name='profile_posts',
+                                on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Запись'
