@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Post, PostCategory, PostComment, Feedback
+from .models import Post, PostCategory, PostComment, Feedback, PostFavorites
 from .forms import PostAddForm, CommentAddForm, FeedbackAddForm, PostAddModelForm
 
 def main(request):
@@ -23,9 +23,19 @@ def main(request):
     # return render(request, 'main.html', {"posts": posts})
 
 def post_detail(request, post_id):
+
+    context = {}
+
     comment_add_form = CommentAddForm()
     post= Post.objects.get(id=post_id)
     comments = PostComment.objects.filter(post=post)
+
+    if request.user.is_authenticated:
+
+        is_favorited = PostFavorites.objects.filter(profile=request.user.profile,
+                                                    post=post)
+        context.update({'is_favorited':is_favorited})
+
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         comment_add_form = CommentAddForm(request.POST)
@@ -34,11 +44,11 @@ def post_detail(request, post_id):
         PostComment.objects.create(post=post, text=data['text'])
         return redirect('post_detail', post.id)
 
-    context = {
+    context.update({
         "post": post,
         'comments': comments,
         'comment_add_form': comment_add_form
-    }
+    })
     return render(request, 'post_detail.html', context)
 
 @login_required
@@ -84,3 +94,24 @@ def feedback_add(request):
 
 def feedback_done(request):
     return render(request, 'feedback_done.html')
+
+
+@login_required
+def post_favorite(request, post_id):
+
+    redirect_url = request.GET.get('next')
+    post = Post.objects.get(id=post_id)
+    profile = request.user.profile
+    PostFavorites.objects.get_or_create(post=post, profile=profile)
+
+    return redirect(redirect_url)
+
+@login_required
+def post_unfavorite(request, post_id):
+
+    redirect_url = request.GET.get('next')
+    post = Post.objects.get(id=post_id)
+    profile = request.user.profile
+    PostFavorites.objects.filter(post=post, profile=profile).delete()
+
+    return redirect(redirect_url)
