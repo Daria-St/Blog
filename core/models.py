@@ -6,6 +6,7 @@ class PostCategory(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+        ordering = ["title"]
 
     def __str__(self):
         return self.title
@@ -37,6 +38,9 @@ class PostComment(models.Model):
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
                              related_name='post_comments')
+    profile = models.ForeignKey(Profile,
+                                related_name='profile_comments',
+                                on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
