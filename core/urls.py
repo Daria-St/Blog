@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
-
-from .views import main,  post_add, post_detail, feedback_add, feedback_done, post_favorite, post_unfavorite, post_edit
+from .views import *
+# from .views import main,  post_add, post_detail, feedback_add, feedback_done, post_favorite, post_unfavorite, post_edit
 
 urlpatterns = [
     path('', main, name='main'),
+    path('posts/search', posts_search, name='posts_search'),
     path('<int:post_id>', post_detail, name='post_detail'),
     path('add', post_add, name='post_add'),
 

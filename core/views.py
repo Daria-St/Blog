@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect
 from .models import Post, PostCategory, PostComment, Feedback, PostFavorites
@@ -41,6 +42,23 @@ def main(request):
     return render(request, 'main.html', context)
 
     # return render(request, 'main.html', {"posts": posts})
+
+
+def posts_search(request):
+    posts = Post.objects.all()
+    text = request.GET.get('text')
+    if text:
+        posts = posts.filter(Q(title__icontains=text)|Q(text__icontains=text))
+    page = request.GET.get('page', 1)
+    p = Paginator(posts, 5)
+    page_objects = p.page(page)
+    categories = PostCategory.objects.all()
+    context = {
+        'categories': categories,
+        'page_objects': page_objects,
+        'search_text': text
+    }
+    return render(request, 'main.html', context)
 
 def post_detail(request, post_id):
 
