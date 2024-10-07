@@ -115,7 +115,7 @@ def post_add(request):
 
     context = {
         'categories':categories,
-        'post_add_form':post_add_form
+        'form':post_add_form
     }
     return render(request, 'post_add.html', context)
 
