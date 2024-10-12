@@ -7,5 +7,6 @@ urlpatterns = [
     path('ajax', ajax, name='api_ajax'),
     path('main/<int:post_id>/favorite', post_favorite, name='api_post_favorite'),
     path('main/<int:post_id>/unfavorite', post_unfavorite, name='api_post_unfavorite'),
+    path('feedback', feedback, name='api_feedback'),
 
 ]

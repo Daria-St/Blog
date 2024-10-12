@@ -137,18 +137,18 @@ def post_edit(request, post_id):
     return render(request, 'post_edit.html', {"post_add_form":form})
 
 def feedback_add(request):
-    feedback_add_form = FeedbackAddForm()
+    form = FeedbackAddForm()
     if request.method == "POST":
-        feedback_add_form = FeedbackAddForm(request.POST)
+        form = FeedbackAddForm(request.POST)
 
-        if feedback_add_form.is_valid():
-            data = feedback_add_form.cleaned_data
+        if form.is_valid():
+            data = form.cleaned_data
             print(data)
             Feedback.objects.create(name=data['name'], text=data['text'])
             return redirect('feedback_done')
 
     context = {
-        'feedback_add_form' : feedback_add_form
+        'form': form
     }
 
     return render(request, 'feedback_add.html', context)
