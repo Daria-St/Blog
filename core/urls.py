@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from .classy_view import PostAddView
+from .classy_views import PostAddView
 from .views import *
 # from .views import main,  post_add, post_detail, feedback_add, feedback_done, post_favorite, post_unfavorite, post_edit
 

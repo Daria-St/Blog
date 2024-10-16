@@ -9,4 +9,6 @@ urlpatterns = [
     path('main/<int:post_id>/unfavorite', post_unfavorite, name='api_post_unfavorite'),
     path('feedback', feedback, name='api_feedback'),
 
+    path('<int:post_id>/comments', post_comments, name='api_post_comments'),
+
 ]

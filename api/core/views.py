@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from core.forms import FeedbackAddForm
-from core.models import Post, PostFavorites
+from core.models import Post, PostFavorites, PostComment
+
 
 def ajax(request):
     return JsonResponse({"status": "Ok", 'message': 'request'})
@@ -37,3 +38,16 @@ def feedback(request):
             return JsonResponse({})
         else:
             return JsonResponse({'errors': form.errors}, status=400)
+
+
+def post_comments(request, post_id):
+    post = Post.objects.get(id=post_id)
+    comments = PostComment.objects.filter(post=post)
+
+    new_comments = []
+    for comment in comments:
+        new_comments.append({
+            'text': comment.text,
+            'profile': comment.profile.user.username
+        })
+    return JsonResponse({'comments':new_comments}, safe=False)
