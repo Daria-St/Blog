@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<h1> Домашнее задание vue.js приложение</h1>
+
+<div id="app">
+    <ul><b>Мои Фильмы</b>
+        <li v-for="i in films"> [[ i ]]</li>
+    </ul>
+
+    <h2 v-if="clicks2>10" style="color:blue"> Не останавливайся </h2>
+    <a v-if="clicks2>50" style="color:blue" href="https://ya.ru/"> https://ya.ru/ </a>
+
+    <ul>
+        <p>Cчетчик новых кликов [[ clicks2 ]]</p>
+        <button @click="addMoreScore">Клик</button>
+    </ul>
+
+    <button @click="getBonusClicks">Получить бонусные клики</button>
+
+</div>
+
+<script>
+    const { createApp } = Vue
+
+    createApp({
+      delimiters: ['[[', ']]'],
+      data() {
+        return {
+          clicks: 0,
+          clicks2: 0,
+          films: ['Мстители', '1+1', 'Зеленая миля', 'Побег и Шоушенка', 'Выстрел в пустоту', 'Убийца'],
+          }
+        },
+        methods: {
+            addMoreScore(){
+                this.clicks2 = this.clicks2 + 10
+            },
+            getBonusClicks(){
+                 const baseUrl = 'http://127.0.0.1:8000/'
+                 axios.get(`${baseUrl}/api/rest/clicks`)
+                    .then(response => {
+                        this.clicks += response.data.clicks;
+                    })
+            }
+        }
+    }).mount('#app')
+</script>
+
+</body>
+</html>

@@ -180,3 +180,6 @@ def post_unfavorite(request, post_id):
     PostFavorites.objects.filter(post=post, profile=profile).delete()
 
     return redirect(redirect_url)
+
+def vue(request):
+    return render(request, 'vue.html')

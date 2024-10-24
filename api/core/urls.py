@@ -12,5 +12,6 @@ urlpatterns = [
     path('rest/feedback_rest', feedback_rest, name='api_feedback_rest'),
 
     path('<int:post_id>/comments', post_comments, name='api_post_comments'),
+    path('rest/clicks', clicks, name='clicks')
 
 ]

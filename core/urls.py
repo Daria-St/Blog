@@ -19,5 +19,6 @@ urlpatterns = [
 
 
     path('favorite/<int:post_id>', post_favorite, name='post_favorite'),
-    path('unfavorite/<int:post_id>', post_unfavorite, name='post_unfavorite')
+    path('unfavorite/<int:post_id>', post_unfavorite, name='post_unfavorite'),
+    path('vue', vue, name='vue'),
 ]

@@ -11,3 +11,7 @@ def feedback_rest(request):
     serialaizer.is_valid(raise_exception=True)
     serialaizer.save()
     return Response(status=200)
+
+@api_view(['GET'])
+def clicks(request):
+    return Response({'clicks': 100})
