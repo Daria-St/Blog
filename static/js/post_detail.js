@@ -19,6 +19,8 @@ function loadComments(){
     })
 }
 
-$(document).ready(function(){
-    loadComments();
-})
+
+
+//$(document).ready(function(){
+//    loadComments();
+//})

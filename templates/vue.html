@@ -25,6 +25,12 @@
 
     <button @click="getBonusClicks">Получить бонусные клики</button>
 
+
+    <ul>Комментарии
+        <li v-for="comment in comments"> Текст: [[ comment.text ]], Имя: [[ comment.profile ]] ID: [[ comment.id ]]</li>
+    </ul>
+    <button @click="getComments">Загрузить комментарии</button>
+
 </div>
 
 <script>
@@ -34,8 +40,10 @@
       delimiters: ['[[', ']]'],
       data() {
         return {
+          baseUrl: 'http://127.0.0.1:8000/',
           clicks: 0,
           clicks2: 0,
+          comments: [],
           films: ['Мстители', '1+1', 'Зеленая миля', 'Побег и Шоушенка', 'Выстрел в пустоту', 'Убийца'],
           }
         },
@@ -49,7 +57,13 @@
                     .then(response => {
                         this.clicks += response.data.clicks;
                     })
-            }
+            },
+            getComments(){
+                axios.get(`${this.baseUrl}/api/rest/comments`)
+                .then(response =>{
+                    this.comments = response.data.comments
+                })
+            },
         }
     }).mount('#app')
 </script>
